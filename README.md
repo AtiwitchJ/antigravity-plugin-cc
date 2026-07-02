@@ -3,7 +3,7 @@
 This plugin is for Claude Code users who want to delegate code reviews or tasks to
 Google's Antigravity CLI ([antigravity.google/docs/cli/using](https://antigravity.google/docs/cli/using)).
 
-## What You Get (once implemented)
+## What You Get
 
 - `/antigravity:review` for a normal read-only review
 - `/antigravity:adversarial-review` for a steerable challenge review
@@ -16,33 +16,32 @@ Google's Antigravity CLI ([antigravity.google/docs/cli/using](https://antigravit
 - Authentication: run `!agy login`
 - **Node.js 18.18 or later**
 
-## Installing the scaffold
+## Install in Claude Code
 
 ```bash
 /plugin marketplace add <your-org>/antigravity-plugin-cc
 /plugin install antigravity@agents-plugin-cc-antigravity
 ```
 
-The scaffold ships with stub commands that will fail with a "not implemented" error
-until you wire up `plugins/antigravity/scripts/lib/antigravity.mjs` and
-`plugins/antigravity/scripts/antigravity-companion.mjs`.
+## Install in Codex
 
-## Implementing the plugin
+```bash
+codex plugin marketplace add ./.agents/plugins/marketplace.json
+codex plugin add antigravity@agents-plugin-cc-antigravity
+```
 
-1. Open `plugins/antigravity/scripts/lib/antigravity.mjs` and replace the stub functions with real
-   implementations that:
-   - detect `agy` availability (`binaryAvailable` is already imported)
-   - probe authentication (`getAntigravityAuthStatus`)
-   - invoke the CLI in the foreground and capture its output (`runAntigravity`)
-   - discover a resumable session if available (`findLatestResumableSession`)
-2. Open `plugins/antigravity/scripts/antigravity-companion.mjs` and copy the body of
-   `../kilo-plugin-cc/plugins/kilo/scripts/kilo-companion.mjs`, renaming the imports from
-   `./lib/kilo.mjs` to `./lib/antigravity.mjs` and the `runKilo` calls to your new wrapper.
-3. Add tests under `tests/` that cover argument parsing, state, and the new wrapper.
+Start a new Codex thread after installing or updating the plugin. Codex-facing skills live
+under `plugins/antigravity/skills/` and call `plugins/antigravity/scripts/antigravity-companion.mjs`.
+
+## Runtime
+
+The companion invokes the local `agy` CLI with `agy --print <prompt>`. `/antigravity:setup`
+or `node plugins/antigravity/scripts/antigravity-companion.mjs setup --json` reports missing
+CLI/authentication steps without returning a placeholder error.
 
 ## Reference
 
-See `../kilo-plugin-cc/` for a complete working example.
+See `../kilo-plugin-cc/` for the reference implementation this runtime follows.
 
 ## License
 

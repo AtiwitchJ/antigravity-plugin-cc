@@ -1,0 +1,20 @@
+{
+  "name": "agents-plugin-cc-antigravity",
+  "interface": {
+    "displayName": "Antigravity Plugin"
+  },
+  "plugins": [
+    {
+      "name": "antigravity",
+      "source": {
+        "source": "local",
+        "path": "./plugins/antigravity"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -5,10 +5,20 @@ description: Operational guidance for calling the Antigravity CLI from this plug
 
 # Antigravity CLI runtime
 
-This is a scaffold skill. Once scripts/lib/antigravity.mjs is implemented, replace this file with real
-operational notes covering:
+The Antigravity plugin wraps the local `agy` CLI. The companion script is implemented and
+uses the same command surface in Claude Code and Codex.
 
-- The exact CLI invocation shape (e.g. \$binary run [flags] "<prompt>"\)
-- Authentication probe (e.g. \$binary profile\)
-- Session lifecycle (start, resume, fork)
-- Cancellation
+## Binary
+
+- Command name: `agy`
+- Install: `irm antigravity.google/install.ps1 | iex`
+- Authentication: `agy login`
+
+## Invocation
+
+- Availability probe: `agy --version`
+- Task/review execution: `agy --print <prompt>`
+- Setup output: `node scripts/antigravity-companion.mjs setup --json`
+
+If `agy` is missing or unauthenticated, setup reports actionable next steps. Runtime
+commands should not describe the companion as a placeholder.
