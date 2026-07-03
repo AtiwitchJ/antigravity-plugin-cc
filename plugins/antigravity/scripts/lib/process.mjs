@@ -1,6 +1,8 @@
 import { spawnSync } from "node:child_process";
 import process from "node:process";
 
+import { buildWindowsShellCommandLine } from "./win-quote.mjs";
+
 export function runCommand(command, args = [], options = {}) {
   const spawnOptions = {
     cwd: options.cwd,
@@ -15,12 +17,15 @@ export function runCommand(command, args = [], options = {}) {
   let result = spawnSync(command, args, { ...spawnOptions, shell: false });
 
   // On Windows, some CLIs only ship as .cmd/.bat/.ps1 shims, which Node cannot
-  // exec directly without a shell. Only fall back to shell:true when direct
+  // exec directly without a shell. Only fall back to shell when direct
   // execution couldn't find the binary at all (ENOENT) — real .exe binaries
   // must stay on shell:false so args pass through untouched instead of being
-  // naively re-concatenated into a shell command line.
+  // naively re-concatenated into a shell command line. When the fallback is
+  // needed, build the command line ourselves with safe quoting rather than
+  // let Node's shell:true + array-args do it (that path is unescaped, see
+  // Node's DEP0190 deprecation notice).
   if (process.platform === "win32" && result.error?.code === "ENOENT") {
-    result = spawnSync(command, args, { ...spawnOptions, shell: true });
+    result = spawnSync(buildWindowsShellCommandLine(command, args), { ...spawnOptions, shell: true });
   }
 
   return {
