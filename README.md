@@ -1,6 +1,6 @@
-# Antigravity plugin for Claude Code
+# Antigravity plugin for Claude Code and Codex
 
-This plugin is for Claude Code users who want to delegate code reviews or tasks to
+This plugin is for Claude Code and Codex users who want to delegate code reviews or tasks to
 Google's Antigravity CLI ([antigravity.google/docs/cli/using](https://antigravity.google/docs/cli/using)).
 
 ## What You Get
